@@ -2,10 +2,8 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const Dish = require('./models/Dish');
 
-// Load environment variables from .env
 dotenv.config();
 
-// Sample dish data
 const sampleDishes = [
   {
     dishId: "D101",
@@ -41,37 +39,26 @@ const sampleDishes = [
 
 const seedDatabase = async () => {
   const mongoUri = process.env.MONGODB_URI;
-
   if (!mongoUri) {
-    console.error('Error: MONGODB_URI is not defined in the environment variables.');
+    console.error('MONGODB_URI is not defined in environment variables.');
     process.exit(1);
   }
 
   try {
-    console.log('Connecting to MongoDB for seeding...');
     await mongoose.connect(mongoUri);
-    console.log('Connected to MongoDB.');
-
-    // Delete existing dishes to avoid duplicate keys during seeding
-    console.log('Clearing existing dishes from database...');
+    
+    // Clear existing data to avoid duplicate key errors
     await Dish.deleteMany({});
-    console.log('Database cleared.');
-
-    // Insert new sample dishes
-    console.log('Inserting sample dishes...');
-    const insertedDishes = await Dish.insertMany(sampleDishes);
-    console.log(`Successfully seeded ${insertedDishes.length} dishes into the database!`);
-
-    // Close the connection
+    
+    await Dish.insertMany(sampleDishes);
+    console.log('Database successfully seeded!');
+    
     await mongoose.connection.close();
-    console.log('MongoDB connection closed.');
     process.exit(0);
   } catch (error) {
     console.error('Error seeding the database:', error);
-    await mongoose.connection.close();
     process.exit(1);
   }
 };
 
-// Execute seeding
 seedDatabase();

@@ -1,10 +1,5 @@
 import React from 'react';
 
-/**
- * DishCard Component
- * Displays individual dish information and a button to toggle its publication status.
- * Keep it simple and readable for easy explanation in interviews.
- */
 const DishCard = ({ dish, onToggle, isToggling }) => {
   const { dishId, dishName, imageUrl, isPublished } = dish;
 
@@ -16,7 +11,6 @@ const DishCard = ({ dish, onToggle, isToggling }) => {
           alt={dishName} 
           className="dish-image"
           onError={(e) => {
-            // Fallback placeholder image if the original URL fails to load
             e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&auto=format&fit=crop&q=80';
           }}
         />

@@ -1,11 +1,8 @@
 const mongoose = require('mongoose');
 const Dish = require('../models/Dish');
 
-// GET /api/dishes
-// Fetch all dishes from the database
 exports.getAllDishes = async (req, res) => {
   try {
-    // Retrieve all dishes and sort them so they appear in a consistent order
     const dishes = await Dish.find().sort({ dishId: 1 });
     res.status(200).json(dishes);
   } catch (error) {
@@ -14,13 +11,10 @@ exports.getAllDishes = async (req, res) => {
   }
 };
 
-// PATCH /api/dishes/:id/toggle
-// Toggle the isPublished value of a dish and notify all clients via Socket.io
 exports.toggleDishStatus = async (req, res) => {
   try {
     const { id } = req.params;
     
-    // Support querying by both MongoDB ObjectId and the custom dishId string
     let query = {};
     if (mongoose.Types.ObjectId.isValid(id)) {
       query = { _id: id };
@@ -34,12 +28,9 @@ exports.toggleDishStatus = async (req, res) => {
       return res.status(404).json({ message: 'Dish not found' });
     }
 
-    // Toggle the published status
     dish.isPublished = !dish.isPublished;
     await dish.save();
 
-    // Emit the real-time update event to all connected Socket.io clients
-    // The 'io' instance is attached to the request object in server.js
     if (req.io) {
       req.io.emit('dishStatusUpdated', dish);
       console.log(`Socket.io: Emitted status change for dish ${dish.dishId} (${dish.isPublished})`);

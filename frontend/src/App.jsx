@@ -4,17 +4,14 @@ import DishCard from './components/DishCard';
 import Spinner from './components/Spinner';
 import './App.css';
 
-// Read the backend URL from environment variables, or default to localhost for local development
 const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 function App() {
   const [dishes, setDishes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  // Keep track of which dishes are currently toggling to disable their buttons during API requests
   const [togglingIds, setTogglingIds] = useState(new Set());
 
-  // 1. Fetch all dishes on initial load
   useEffect(() => {
     const fetchDishes = async () => {
       try {
@@ -30,7 +27,7 @@ function App() {
         setDishes(data);
       } catch (err) {
         console.error('Error fetching dishes:', err);
-        setError(err.message || 'Could not connect to backend server. Make sure the backend server is running.');
+        setError(err.message || 'some error occurred please retry again.');
       } finally {
         setLoading(false);
       }
@@ -39,27 +36,19 @@ function App() {
     fetchDishes();
   }, []);
 
-  // 2. Real-Time Updates via Socket.io
   useEffect(() => {
-    // Establish connection to Socket.io server
     const socket = io(BACKEND_URL);
 
-    // Event listener for dish status changes from any client or backend update
     socket.on('dishStatusUpdated', (updatedDish) => {
-      console.log('Real-time update received:', updatedDish);
-      
       setDishes((prevDishes) => {
-        // Find if this dish exists in our state
         const exists = prevDishes.some(
           (dish) => dish._id === updatedDish._id || dish.dishId === updatedDish.dishId
         );
 
         if (!exists) {
-          // If it's a new dish not in list, add it
           return [...prevDishes, updatedDish].sort((a, b) => a.dishId.localeCompare(b.dishId));
         }
 
-        // Update the status of the matching dish
         return prevDishes.map((dish) => {
           if (dish._id === updatedDish._id || dish.dishId === updatedDish.dishId) {
             return updatedDish;
@@ -69,32 +58,21 @@ function App() {
       });
     });
 
-    socket.on('connect', () => {
-      console.log('Connected to Socket.io server');
-    });
-
-    socket.on('disconnect', () => {
-      console.log('Disconnected from Socket.io server');
-    });
-
-    // Cleanup connection on unmount
     return () => {
       socket.disconnect();
     };
   }, []);
 
-  // 3. Toggle Status of a Dish
   const handleToggleStatus = async (dish) => {
     const idToToggle = dish._id || dish.dishId;
 
-    // Track toggling state for this specific dish ID (for disabling button / showing loader)
     setTogglingIds((prev) => {
       const next = new Set(prev);
       next.add(idToToggle);
       return next;
     });
 
-    // Optimistic UI Update: immediately change the status locally for instantaneous feedback
+    // Optimistic UI update
     const originalDishes = [...dishes];
     setDishes((prevDishes) =>
       prevDishes.map((d) => {
@@ -119,7 +97,6 @@ function App() {
 
       const updatedDish = await response.json();
 
-      // Ensure local state matches exactly what the backend returned
       setDishes((prevDishes) =>
         prevDishes.map((d) => {
           if (d._id === updatedDish._id || d.dishId === updatedDish.dishId) {
@@ -131,10 +108,8 @@ function App() {
     } catch (err) {
       console.error('Error toggling dish status:', err);
       alert(`Error updating dish status: ${err.message}. Reverting changes...`);
-      // Revert back to the original dishes if the API request fails
       setDishes(originalDishes);
     } finally {
-      // Remove from toggling state
       setTogglingIds((prev) => {
         const next = new Set(prev);
         next.delete(idToToggle);
@@ -189,7 +164,7 @@ function App() {
       </main>
 
       <footer className="app-footer">
-        <p>Dish Dashboard &copy; 2026 - Student Engineering Project</p>
+        <p>Dish Dashboard &copy; 2026</p>
       </footer>
     </div>
   );

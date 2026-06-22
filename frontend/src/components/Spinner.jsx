@@ -1,9 +1,5 @@
 import React from 'react';
 
-/**
- * Spinner Component
- * Displays a simple, clean CSS-based loading spinner.
- */
 const Spinner = ({ message = 'Loading dishes...' }) => {
   return (
     <div className="spinner-container">
