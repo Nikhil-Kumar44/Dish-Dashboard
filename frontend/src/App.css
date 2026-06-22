@@ -1,0 +1,268 @@
+/* Container Layout */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header Styling - Clean and Centered */
+.app-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--border-color);
+  padding: 1.5rem 1rem;
+  text-align: center;
+}
+
+.app-header h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+
+/* Main Content Area */
+.app-content {
+  flex: 1;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+}
+
+/* Dish Grid - Responsive layout */
+.dishes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  justify-content: center;
+}
+
+/* Dish Card design */
+.dish-card {
+  background-color: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+/* Subtle hover effects */
+.dish-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--hover-border-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.dish-image-container {
+  width: 100%;
+  height: 200px;
+  background-color: #f7f7f7;
+  border-bottom: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+.dish-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dish-info {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex-grow: 1;
+}
+
+.dish-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.dish-id {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.dish-status-container {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Status Badge */
+.status-badge {
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.status-badge.published {
+  background-color: var(--status-published-bg);
+  color: var(--status-published-text);
+}
+
+.status-badge.unpublished {
+  background-color: var(--status-unpublished-bg);
+  color: var(--status-unpublished-text);
+}
+
+/* Action / Toggle Button */
+.dish-actions {
+  padding: 1rem 1.25rem 1.25rem 1.25rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.toggle-btn {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: var(--btn-primary);
+  color: #ffffff;
+  border: 1px solid var(--btn-primary);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.toggle-btn:hover:not(:disabled) {
+  background-color: var(--btn-primary-hover);
+  border-color: var(--btn-primary-hover);
+}
+
+.toggle-btn:disabled {
+  background-color: var(--btn-disabled);
+  color: var(--btn-disabled-text);
+  border-color: var(--btn-disabled);
+  cursor: not-allowed;
+}
+
+/* Footer Styling */
+.app-footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  border-top: 1px solid var(--border-color);
+  background-color: #ffffff;
+}
+
+.app-footer p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Custom CSS Spinner */
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1rem;
+  gap: 1.5rem;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid var(--btn-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.spinner-message {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Error States */
+.error-container {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 1rem;
+}
+
+.error-card {
+  max-width: 400px;
+  width: 100%;
+  border: 1px solid var(--status-unpublished-text);
+  border-radius: 6px;
+  padding: 2rem;
+  text-align: center;
+  background-color: var(--status-unpublished-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.error-icon {
+  font-size: 2.5rem;
+}
+
+.error-card h3 {
+  color: var(--status-unpublished-text);
+  font-size: 1.3rem;
+}
+
+.error-card p {
+  color: #333333;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.retry-btn {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.9rem;
+  border: 1px solid var(--status-unpublished-text);
+  background-color: #ffffff;
+  color: var(--status-unpublished-text);
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.retry-btn:hover {
+  background-color: var(--status-unpublished-text);
+  color: #ffffff;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 4rem 1rem;
+  border: 1px dashed var(--border-color);
+  border-radius: 6px;
+  color: var(--text-secondary);
+}
+
+/* Media Queries for Extra Responsiveness */
+@media (max-width: 600px) {
+  .app-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .app-content {
+    padding: 1.5rem 1rem;
+  }
+  
+  .dishes-grid {
+    gap: 1.25rem;
+    grid-template-columns: 1fr; /* Full width cards on small screens */
+  }
+}
